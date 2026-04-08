@@ -356,83 +356,14 @@ export default function Calender() {
                 <h3 className="font-bold tracking-widest text-[#ff4655] uppercase">
                   Notes & Tasks
                 </h3>
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 cursor-pointer text-[#ff4655] hover:bg-[#ff4655]/10 hover:text-[#ff4655]"
-                    >
-                      <IconPlus size={20} />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-background font-grotesk rounded-none border-2 border-zinc-300 uppercase shadow-[8px_8px_0px_0px_#ff4655] sm:max-w-106.25 dark:border-zinc-700">
-                    <DialogHeader>
-                      <DialogTitle className="text-xl font-bold tracking-widest text-[#ff4655]">
-                        Add Protocol
-                      </DialogTitle>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="flex flex-col gap-2">
-                        <Label className="font-bold text-[#ff4655]">
-                          Details
-                        </Label>
-                        <Textarea
-                          placeholder="ENTER DIRECTIVES..."
-                          className="min-h-24 resize-none rounded-none border-2 border-zinc-300 focus-visible:border-[#ff4655] focus-visible:ring-0 dark:border-zinc-700"
-                          value={newTaskContent}
-                          onChange={(e) => setNewTaskContent(e.target.value)}
-                        />
-                      </div>
-                      <div className="flex gap-4">
-                        <div className="flex flex-1 flex-col gap-2">
-                          <Label className="font-bold text-[#ff4655]">
-                            Priority
-                          </Label>
-                          <div className="flex flex-col gap-2">
-                            {(["low", "medium", "high"] as const).map((p) => (
-                              <Button
-                                key={p}
-                                variant={
-                                  newTaskPriority === p ? "default" : "outline"
-                                }
-                                onClick={() => setNewTaskPriority(p)}
-                                className={`h-8 rounded-none border-2 ${newTaskPriority === p ? "border-[#ff4655] bg-[#ff4655] text-white hover:bg-[#ff4655]/90" : "border-zinc-300 dark:border-zinc-700"}`}
-                              >
-                                {p}
-                              </Button>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="flex flex-1 flex-col gap-2">
-                          <Label className="font-bold text-[#ff4655]">
-                            Status
-                          </Label>
-                          <div className="flex flex-col gap-2">
-                            {(["todo", "ongoing", "done"] as const).map((s) => (
-                              <Button
-                                key={s}
-                                variant={
-                                  newTaskStatus === s ? "default" : "outline"
-                                }
-                                onClick={() => setNewTaskStatus(s)}
-                                className={`h-8 cursor-pointer rounded-none border-2 ${newTaskStatus === s ? "border-zinc-800 bg-zinc-800 text-white hover:bg-zinc-700 dark:border-zinc-200 dark:bg-zinc-200 dark:text-black" : "border-zinc-300 dark:border-zinc-700"}`}
-                              >
-                                {s}
-                              </Button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <Button
-                        onClick={addTask}
-                        className="bg-background mt-4 w-full rounded-none border-2 border-[#ff4655] font-bold tracking-widest text-[#ff4655] shadow-[4px_4px_0px_0px_#ff4655] transition-all hover:-translate-y-1 hover:bg-[#ff4655] hover:text-white"
-                      >
-                        INITIALIZE
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 cursor-pointer text-[#ff4655] hover:bg-[#ff4655]/10 hover:text-[#ff4655]"
+                  onClick={() => setIsDialogOpen(true)}
+                >
+                  <IconPlus size={20} />
+                </Button>
               </div>
               {startDate && (
                 <div className="mt-1 flex items-center justify-between pr-2 text-[10px] font-bold tracking-widest text-zinc-500 uppercase">
@@ -574,6 +505,14 @@ export default function Calender() {
                 <h3 className="font-bold tracking-widest text-[#ff4655] uppercase">
                   Notes & Tasks
                 </h3>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 cursor-pointer text-[#ff4655] hover:bg-[#ff4655]/10 hover:text-[#ff4655]"
+                  onClick={() => setIsDialogOpen(true)}
+                >
+                  <IconPlus size={20} />
+                </Button>
               </div>
               {startDate && (
                 <div className="mt-1 flex items-center justify-between pr-2 text-[10px] font-bold tracking-widest text-zinc-500 uppercase">
@@ -631,6 +570,65 @@ export default function Calender() {
           </div>
         ) : null}
       </DragOverlay>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="bg-background font-grotesk rounded-none border-2 border-zinc-300 uppercase shadow-[8px_8px_0px_0px_#ff4655] sm:max-w-106.25 dark:border-zinc-700">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold tracking-widest text-[#ff4655]">
+              Add Protocol
+            </DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="flex flex-col gap-2">
+              <Label className="font-bold text-[#ff4655]">Details</Label>
+              <Textarea
+                placeholder="ENTER DIRECTIVES..."
+                className="min-h-24 resize-none rounded-none border-2 border-zinc-300 focus-visible:border-[#ff4655] focus-visible:ring-0 dark:border-zinc-700"
+                value={newTaskContent}
+                onChange={(e) => setNewTaskContent(e.target.value)}
+              />
+            </div>
+            <div className="flex gap-4">
+              <div className="flex flex-1 flex-col gap-2">
+                <Label className="font-bold text-[#ff4655]">Priority</Label>
+                <div className="flex flex-col gap-2">
+                  {(["low", "medium", "high"] as const).map((p) => (
+                    <Button
+                      key={p}
+                      variant={newTaskPriority === p ? "default" : "outline"}
+                      onClick={() => setNewTaskPriority(p)}
+                      className={`h-8 rounded-none border-2 ${newTaskPriority === p ? "border-[#ff4655] bg-[#ff4655] text-white hover:bg-[#ff4655]/90" : "border-zinc-300 dark:border-zinc-700"}`}
+                    >
+                      {p}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-1 flex-col gap-2">
+                <Label className="font-bold text-[#ff4655]">Status</Label>
+                <div className="flex flex-col gap-2">
+                  {(["todo", "ongoing", "done"] as const).map((s) => (
+                    <Button
+                      key={s}
+                      variant={newTaskStatus === s ? "default" : "outline"}
+                      onClick={() => setNewTaskStatus(s)}
+                      className={`h-8 cursor-pointer rounded-none border-2 ${newTaskStatus === s ? "border-zinc-800 bg-zinc-800 text-white hover:bg-zinc-700 dark:border-zinc-200 dark:bg-zinc-200 dark:text-black" : "border-zinc-300 dark:border-zinc-700"}`}
+                    >
+                      {s}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <Button
+              onClick={addTask}
+              className="bg-background mt-4 w-full rounded-none border-2 border-[#ff4655] font-bold tracking-widest text-[#ff4655] shadow-[4px_4px_0px_0px_#ff4655] transition-all hover:-translate-y-1 hover:bg-[#ff4655] hover:text-white"
+            >
+              INITIALIZE
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </DndContext>
   );
 }
