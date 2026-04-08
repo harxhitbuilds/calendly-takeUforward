@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     siteName: "Calendly Clone",
     images: [
       {
-        url: "/marketing/hero.png",
+        url: "/marketing/og.png",
         width: 1200,
         height: 630,
         alt: "Calendly Hero Image",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Calendly - TakeUForward Internship Task",
     description: "This is assignment for TakeUForward Internship Task.",
-    images: ["/marketing/hero.png"],
+    images: ["/marketing/og.png"],
   },
 };
 
