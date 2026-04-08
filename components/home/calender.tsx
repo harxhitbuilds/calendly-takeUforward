@@ -20,6 +20,7 @@ import {
   IconChevronRight,
   IconPlus,
 } from "@tabler/icons-react";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 
 import { useEffect, useState } from "react";
@@ -40,6 +41,7 @@ import { Task, toYYYYMMDD } from "./calender-components/types";
 
 export default function Calender() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [direction, setDirection] = useState(0);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -57,7 +59,6 @@ export default function Calender() {
     const savedTasks = localStorage.getItem("valorant-calendar-tasks");
     if (savedTasks) {
       try {
-         
         setTasks(JSON.parse(savedTasks));
       } catch (_e) {
         console.error("Failed to parse tasks");
@@ -93,12 +94,14 @@ export default function Calender() {
   ).getDay();
 
   const prevMonth = () => {
+    setDirection(-1);
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1),
     );
   };
 
   const nextMonth = () => {
+    setDirection(1);
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1),
     );
@@ -117,6 +120,21 @@ export default function Calender() {
     "October",
     "November",
     "December",
+  ];
+
+  const monthImages = [
+    "/assets/one.jpg", // January
+    "/assets/two.png", // February
+    "/assets/three.jpg", // March
+    "/assets/four.jpg", // April
+    "/assets/five.jpg", // May
+    "/assets/six.jpg", // June
+    "/assets/seven.jpg", // July
+    "/assets/eight.jpg", // August
+    "/assets/nine.jpg", // September
+    "/assets/ten.jpg", // October
+    "/assets/eleven.jpg", // November
+    "/assets/twelve.jpg", // December
   ];
 
   const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
@@ -303,17 +321,33 @@ export default function Calender() {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      <div className="font-grotesk flex w-full flex-col gap-8 px-4 uppercase lg:flex-row lg:px-0">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="font-grotesk flex w-full flex-col gap-8 px-4 uppercase lg:flex-row lg:px-0"
+      >
         <div className="w-full flex-1 shrink-0 lg:w-1/2">
           <div className="relative aspect-video w-full overflow-hidden border-2 border-zinc-300 shadow-[8px_8px_0px_0px_var(--accent)] dark:border-zinc-700 dark:shadow-[8px_8px_0px_0px_var(--accent)]">
-            <Image
-              src="/assets/cover.jpg"
-              alt="Month Hero"
-              fill
-              className="object-cover"
-              loading="eager"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentDate.getMonth()}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+                className="absolute inset-0 h-full w-full"
+              >
+                <Image
+                  src={monthImages[currentDate.getMonth()]}
+                  alt={`${monthNames[currentDate.getMonth()]} Hero`}
+                  fill
+                  className="object-cover"
+                  loading="eager"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           <div className="bg-background/50 mt-8 hidden min-h-75 flex-col border-2 border-zinc-300 p-4 lg:flex dark:border-zinc-700">
@@ -450,7 +484,18 @@ export default function Calender() {
               <span className="text-accent mr-2">
                 [{currentDate.getFullYear()}]
               </span>
-              {monthNames[currentDate.getMonth()]}
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={currentDate.getMonth()}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2 }}
+                  className="inline-block"
+                >
+                  {monthNames[currentDate.getMonth()]}
+                </motion.span>
+              </AnimatePresence>
             </h2>
             <div className="flex gap-2">
               <Button
@@ -472,43 +517,55 @@ export default function Calender() {
             </div>
           </div>
 
-          <div className="grid w-full grid-cols-7 gap-2 sm:gap-3">
-            {daysOfWeek.map((day) => (
-              <div
-                key={day}
-                className="flex items-center justify-center pb-2 font-bold tracking-widest text-[#ff4655]"
+          <div className="w-full overflow-hidden">
+            <AnimatePresence mode="wait" custom={direction}>
+              <motion.div
+                key={currentDate.toISOString()}
+                custom={direction}
+                initial={{ opacity: 0, x: direction > 0 ? 20 : -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: direction > 0 ? -20 : 20 }}
+                transition={{ duration: 0.2 }}
+                className="grid w-full grid-cols-7 gap-2 sm:gap-3"
               >
-                {day}
-              </div>
-            ))}
+                {daysOfWeek.map((day) => (
+                  <div
+                    key={day}
+                    className="flex items-center justify-center pb-2 font-bold tracking-widest text-[#ff4655]"
+                  >
+                    {day}
+                  </div>
+                ))}
 
-            {emptyDays.map((_, index) => (
-              <div
-                key={`empty-${index}`}
-                className="aspect-square w-full border-2 border-transparent bg-zinc-200/50 dark:bg-zinc-800/50"
-              />
-            ))}
+                {emptyDays.map((_, index) => (
+                  <div
+                    key={`empty-${index}`}
+                    className="aspect-square w-full border-2 border-transparent bg-zinc-200/50 dark:bg-zinc-800/50"
+                  />
+                ))}
 
-            {days.map((day) => {
-              const selected = isSelected(day);
-              const rangeStart = isRangeStart(day);
-              const rangeEnd = isRangeEnd(day);
-              const today = isToday(day);
-              const taskPresent = hasTask(day);
+                {days.map((day) => {
+                  const selected = isSelected(day);
+                  const rangeStart = isRangeStart(day);
+                  const rangeEnd = isRangeEnd(day);
+                  const today = isToday(day);
+                  const taskPresent = hasTask(day);
 
-              return (
-                <DroppableDay
-                  key={day}
-                  day={day}
-                  isSelected={selected}
-                  isRangeStart={rangeStart}
-                  isRangeEnd={rangeEnd}
-                  isToday={today}
-                  taskPresent={taskPresent}
-                  onClick={() => handleDateClick(day)}
-                />
-              );
-            })}
+                  return (
+                    <DroppableDay
+                      key={day}
+                      day={day}
+                      isSelected={selected}
+                      isRangeStart={rangeStart}
+                      isRangeEnd={rangeEnd}
+                      isToday={today}
+                      taskPresent={taskPresent}
+                      onClick={() => handleDateClick(day)}
+                    />
+                  );
+                })}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           <div className="bg-background/50 mt-4 flex min-h-75 flex-col border-2 border-zinc-300 p-4 lg:hidden dark:border-zinc-700">
@@ -560,7 +617,7 @@ export default function Calender() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <DragOverlay>
         {activeId ? (
