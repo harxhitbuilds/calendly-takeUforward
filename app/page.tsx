@@ -1,9 +1,14 @@
-import ModeToggle from "@/components/theme/mode-toggle";
+import Container from "@/components/global/container";
+import Calender from "@/components/home/calender";
+import Header from "@/components/home/header";
+import SettingDialog from "@/components/home/setting-dialog";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4">
-      <ModeToggle />
-    </div>
+    <Container className="relative flex min-h-screen flex-col justify-center gap-8 py-12">
+      <Header />
+      <Calender />
+      <SettingDialog />
+    </Container>
   );
 }
