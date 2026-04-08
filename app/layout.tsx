@@ -20,6 +20,28 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Calendly - TakeUForward Internship Task",
   description: "This is assignment for TakeUForward Internship Task.",
+  openGraph: {
+    title: "Calendly - TakeUForward Internship Task",
+    description: "This is assignment for TakeUForward Internship Task.",
+    url: "https://calendly.harshitparmar.in",
+    siteName: "Calendly Clone",
+    images: [
+      {
+        url: "/marketing/hero.png",
+        width: 1200,
+        height: 630,
+        alt: "Calendly Hero Image",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Calendly - TakeUForward Internship Task",
+    description: "This is assignment for TakeUForward Internship Task.",
+    images: ["/marketing/hero.png"],
+  },
 };
 
 export default function RootLayout({
